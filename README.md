@@ -35,12 +35,15 @@ run `exp start` in the project root instead.**
 
 Be sure to have followed the set up steps above before continuing here.
 
-1. Get the client running for the platform that you want to work on.
-2. Make native changes in the
+1. Pull the latest version of each submodule `git submodule update
+--init --recursive --remote` -- you may need to go into a few
+--directories and clear the index. Run `./tools/npm-hyperinstall` again.
+2. Get the client running for the platform that you want to work on.
+3. Make native changes in the
 [ios/Exponent/Versioned](https://github.com/expo/expo/tree/master/ios/Exponent/Versioned)
 directory for iOS and
 [android/expoview/src/main/java/versioned](https://github.com/expo/expo/tree/master/android/expoview/src/main/java/versioned)
 directory for Android.
-3. Re-build the app and open up playground or test-suite.
-4. Make the changes in `libraries/expo-sdk` to use the native APIs that
+4. Re-build the app and open up playground or test-suite.
+5. Make the changes in `libraries/expo-sdk` to use the native APIs that
 you exposed before.
