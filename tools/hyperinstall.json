@@ -1,0 +1,9 @@
+{
+  "../apps/playground": 0,
+  "../apps/test-suite": 0,
+  "../expo/js": 0,
+  "../libraries/expo-sdk": 0,
+  "../libraries/vector-icons": 0,
+  "../react-native-lab": 0,
+  "../react-native-lab/react-native": 0
+}
