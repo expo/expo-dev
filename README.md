@@ -22,7 +22,7 @@ you on these projects without it.
 2. Run `git submodule update --init --recursive --remote` -- this will
 get the latest version of each package.
 3. `npm install -g hyperinstall`
-4. Run `./npm-hyperinstall`
+4. Run `./tools/npm-hyperinstall`
 5. Follow [these instructions to get the Expo client running](https://github.com/expo/expo#set-up)
 6. Once you have the iOS or Android client running, cd into `apps/test-suite/__develop__` and run `exp start`
 7. Open the test-suite app using the client that you built.
