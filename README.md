@@ -1,5 +1,7 @@
 # expo-dev
 
+**WIP: this won't work for you yet out of the box**
+
 The purpose of this repository is to make it easier for people to
 contribute to Expo.
 
