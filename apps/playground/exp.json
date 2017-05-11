@@ -1,0 +1,24 @@
+{
+  "name": "playground",
+  "description": "An empty new project",
+  "slug": "playground",
+  "privacy": "public",
+  "sdkVersion": "UNVERSIONED",
+  "version": "1.0.0",
+  "orientation": "portrait",
+  "primaryColor": "#cccccc",
+  "icon": "./assets/icons/app.png",
+  "loading": {
+    "icon": "./assets/icons/loading.png",
+    "hideExponentText": false
+  },
+  "ios": {
+    "supportsTablet": true
+  },
+  "rnCliPath": "../../react-native-lab/react-native/local-cli/cli.js",
+  "packagerOpts": {
+    "projectRoots": "",
+    "config": "./rn-cli.config.js",
+    "assetExts": ["ttf", "mp4"]
+  }
+}

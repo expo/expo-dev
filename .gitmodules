@@ -1,0 +1,15 @@
+[submodule "expo"]
+	path = expo
+	url = git@github.com:expo/expo.git
+[submodule "libraries/expo-sdk"]
+	path = libraries/expo-sdk
+	url = git@github.com:expo/expo-sdk.git
+[submodule "apps/test-suite"]
+	path = apps/test-suite
+	url = git@github.com:expo/test-suite.git
+[submodule "react-native-lab/react-native"]
+	path = react-native-lab/react-native
+	url = git@github.com:expo/react-native.git
+[submodule "libraries/vector-icons"]
+	path = libraries/vector-icons
+	url = git@github.com:expo/vector-icons.git
