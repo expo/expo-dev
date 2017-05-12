@@ -16,3 +16,6 @@
 [submodule "dev/xdl"]
 	path = dev/xdl
 	url = git@github.com:expo/xdl.git
+[submodule "libraries/ex-navigation"]
+	path = libraries/ex-navigation
+	url = git@github.com:expo/ex-navigation.git

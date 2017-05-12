@@ -14,13 +14,13 @@ pushd ../dev/xdl
 npm run build
 npm unlink || true
 npm link
-rm -rf node_modules/dtrace-provider
+# rm -rf node_modules/dtrace-provider
 popd
 
 pushd ../expo/tools-public
 npm link xdl
-rm -rf node_modules/dtrace-provider
+# rm -rf node_modules/dtrace-provider
 popd
 
-cd ../expo/js
+cd ../expo/js/__develop__
 exp start
