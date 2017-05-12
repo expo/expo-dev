@@ -13,11 +13,12 @@ a place for you to experiment with the ipi that you're working on.
 ## Set up
 
 1. Clone this repository
-2. Run `git submodule update --init --recursive --remote` -- this will
-get the latest version of each package.
-3. `npm install -g hyperinstall`
-4. Run `./tools/npm-hyperinstall`
-5. Follow [these instructions to get the Expo client running](https://github.com/expo/expo#set-up)
+2. `npm install -g hyperinstall`
+3. Run `./tools/setup` -- this will get the latest version of each
+package, then build and link xdl and start the packager for Expo home.
+5. Follow [these steps to run the Expo client on
+Android](https://github.com/expo/expo#android) or [these
+steps](https://github.com/expo/expo#ios) to run it on iOS.
 6. Once you have the iOS or Android client running, cd into `apps/test-suite/__develop__` and run `exp start`
 7. Open the test-suite app using the client that you built.
 

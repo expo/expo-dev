@@ -13,3 +13,6 @@
 [submodule "libraries/vector-icons"]
 	path = libraries/vector-icons
 	url = git@github.com:expo/vector-icons.git
+[submodule "dev/xdl"]
+	path = dev/xdl
+	url = git@github.com:expo/xdl.git

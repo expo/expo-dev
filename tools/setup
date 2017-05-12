@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -eu
+
+ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+cd $ROOT
+
+git submodule init
+git submodule update
+
+./npm-hyperinstall-universe "$@"
+
+pushd ../dev/xdl
+npm run build
+npm unlink || true
+npm link
+rm -rf node_modules/dtrace-provider
+popd
+
+pushd ../expo/tools-public
+npm link xdl
+rm -rf node_modules/dtrace-provider
+popd
+
+cd ../expo/js
+exp start
