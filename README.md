@@ -12,7 +12,8 @@ a place for you to experiment with the ipi that you're working on.
 
 ## Set up
 
-1. Clone this repository
+0. First, make sure you have Node >= v7.9.0 installed.
+1. Clone this repository `git clone git@github.com:expo/expo-dev.git`
 2. `npm install -g hyperinstall`
 3. Run `./tools/setup` -- this will get the latest version of each
 package, then build and link xdl and start the packager for Expo home.
