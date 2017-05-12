@@ -1,7 +1,5 @@
 # expo-dev
 
-**WIP: this won't work for you yet out of the box**
-
 The purpose of this repository is to make it easier for people to
 contribute to Expo.
 
@@ -11,12 +9,6 @@ libraries/expo-sdk.
 
 An empty project in apps/playground is configured in the same way and is
 a place for you to experiment with the ipi that you're working on.
-
-### Please use npm rather than yarn here
-
-On our internal monorepo we have a yarn cache, and yarn.lock for these
-projects will point to that internal cache and `yarn` won't work for
-you on these projects without it.
 
 ## Set up
 
