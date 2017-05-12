@@ -27,6 +27,24 @@ steps](https://github.com/expo/expo#ios) to run it on iOS.
 test-suite. `apps/playground` doesn't have a `__develop__` directory,
 run `exp start` in the project root instead.**
 
+## Uing our eslint setup
+
+We use prettier with eslint to keep code formatted nicely. The .eslintrc
+in root is the one we use for every project -- I use Visual Studio Code
+with the `dbaeumer.vscode-eslint` plugin and configure it to point to
+my .eslintrc with:
+
+```
+{
+  "eslint.options": {
+    "configFile": "/Users/brent/expo-dev/.eslintrc"
+  }
+}
+```
+
+It's up to you whether you want to format on save or not, but please
+format JS changes before submitting a PR.
+
 ## Workflow for writing native APIs
 
 Be sure to have followed the set up steps above before continuing here.

@@ -19,3 +19,6 @@
 [submodule "libraries/ex-navigation"]
 	path = libraries/ex-navigation
 	url = git@github.com:expo/ex-navigation.git
+[submodule "apps/native-component-list"]
+	path = apps/native-component-list
+	url = git@github.com:expo/native-component-list.git
