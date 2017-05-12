@@ -2,8 +2,11 @@
   "../apps/playground": 0,
   "../apps/test-suite": 0,
   "../expo/js": 0,
+  "../expo/tools": 0,
+  "../dev/xdl": 0,
   "../libraries/expo-sdk": 0,
   "../libraries/vector-icons": 0,
+  "../libraries/ex-navigation": 0,
   "../react-native-lab": 0,
   "../react-native-lab/react-native": 0
 }
