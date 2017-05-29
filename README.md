@@ -27,6 +27,12 @@ steps](https://github.com/expo/expo#ios) to run it on iOS.
 test-suite. `apps/playground` doesn't have a `__develop__` directory,
 run `exp start` in the project root instead.**
 
+## Pulling the latest versions of each repo
+
+- Check out the master branch in each submodule and have a clean index,
+then run `git submodule foreach "git pull"`
+- Commit the new submodule commit refs. ([example commit](https://github.com/expo/expo-dev/commit/e69d197f))
+
 ## Uing our eslint setup
 
 We use prettier with eslint to keep code formatted nicely. The .eslintrc
