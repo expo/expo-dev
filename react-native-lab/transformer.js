@@ -7,128 +7,171 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  *
  * Note: This is a fork of the fb-specific transform.js
+ *
+ * @flow
  */
 'use strict';
 
+/**
+ * [Expo] This transformer was based on React Native's transformer with the
+ * following changes:
+ *   - Makes the packager use react-native-lab's copy of react-native
+ *   - Rewrites the paths of this module's dependencies so we load the
+ *     dependencies from react-native-lab's copy of react-native, to simulate
+ *     if we hadn't forked the transformer at all
+ */
+
+const babel = require('./react-native/node_modules/babel-core');
+const crypto = require('crypto');
+const externalHelpersPlugin = require('./react-native/node_modules/babel-plugin-external-helpers');
+const fs = require('fs');
+const generate = require('./react-native/node_modules/babel-generator').default;
+const inlineRequiresPlugin = require('./react-native/node_modules/babel-preset-fbjs/plugins/inline-requires');
+const makeHMRConfig = require('./react-native/node_modules/babel-preset-react-native/configs/hmr');
 const path = require('path');
-const babel = require('babel-core');
-const constantElementsPlugin = require('babel-plugin-transform-react-constant-elements');
-const reactTransformPlugin = require('babel-plugin-react-transform').default;
-const externalHelpersPlugin = require('babel-plugin-external-helpers');
-// const inlineRequiresPlugin = require('fbjs-scripts/babel-6/inline-requires');
+const resolvePlugins = require('./react-native/node_modules/babel-preset-react-native/lib/resolvePlugins');
 
-var hmrTransform = 'react-transform-hmr/lib/index.js';
-var transformPath = require.resolve(hmrTransform);
+const {
+  compactMapping,
+} = require('./react-native/node_modules/metro-bundler/build/Bundler/source-map'); // Chnage in SDK 20
 
-const makeHMRConfig = function(options, filename) {
-  var transform = filename
-    ? './' + path.relative(path.dirname(filename), transformPath) // packager can't handle absolute paths
-    : hmrTransform;
+import type { Plugins as BabelPlugins } from './react-native/node_modules/babel-core';
+import type {
+  Transformer,
+  TransformOptions,
+} from './react-native/node_modules/metro-bundler/build/JSTransformer/worker'; // Change in SDK 20
 
-  return {
-    plugins: [
-      [
-        reactTransformPlugin,
-        {
-          transforms: [
-            {
-              transform,
-              imports: ['react-native'],
-              locals: ['module'],
-            },
-          ],
-        },
-      ],
-    ],
-  };
-};
-
-const buildAliasPreset = (reactNativePath, reactPath, expoPath) => {
-  return {
-    plugins: [
-      [
-        require('babel-plugin-module-resolver').default,
-        {
-          alias: {
-            'react-native': path.resolve(`${reactNativePath || './react-native'}`),
-            'react': path.resolve(`${reactPath || './react-native/node_modules/react'}`),
-            'expo': path.resolve(`${expoPath || '../expo'}`),
-          },
-        },
-      ],
-    ],
-  }
-}
+const cacheKeyParts = [
+  fs.readFileSync(__filename),
+  require('./react-native/node_modules/babel-plugin-external-helpers/package.json')
+    .version,
+  require('./react-native/node_modules/babel-preset-fbjs/package.json').version,
+  require('./react-native/node_modules/babel-preset-react-native/package.json')
+    .version,
+];
 
 /**
  * Given a filename and options, build a Babel
  * config object with the appropriate plugins.
  */
 function buildBabelConfig(filename, options) {
-  const babelConfig = {
+  // [Expo] We create the Babel configuration here instead of loading babelrc
+  const babelRC = {
     presets: [
       require('babel-preset-react-native-stage-0/decorator-support'),
-      buildAliasPreset(options.reactNativePath, options.reactPath, options.expoPath),
+      buildModuleResolverPreset(),
     ],
     plugins: [],
   };
 
   const extraConfig = {
+    code: false,
     filename,
-    sourceFileName: filename,
-    sourceMaps: true,
   };
 
-  let config = Object.assign({}, babelConfig, extraConfig);
+  let config = Object.assign({}, babelRC, extraConfig);
 
   // Add extra plugins
   const extraPlugins = [externalHelpersPlugin];
 
   var inlineRequires = options.inlineRequires;
-  var blacklist = inlineRequires && inlineRequires.blacklist;
+  var blacklist = typeof inlineRequires === 'object'
+    ? inlineRequires.blacklist
+    : null;
   if (inlineRequires && !(blacklist && filename in blacklist)) {
     extraPlugins.push(inlineRequiresPlugin);
   }
 
   config.plugins = extraPlugins.concat(config.plugins);
 
-  let extraPresets = [];
-
   if (options.hot) {
     const hmrConfig = makeHMRConfig(options, filename);
-    extraPresets.push(hmrConfig);
+    config = Object.assign({}, config, hmrConfig);
   }
 
-  config.presets = [...config.presets, ...extraPresets];
-
-  return Object.assign({}, babelConfig, config);
+  return Object.assign({}, babelRC, config);
 }
 
-function transform(src, filename, options) {
+type Params = {
+  filename: string,
+  options: TransformOptions,
+  plugins?: BabelPlugins,
+  src: string,
+};
+
+function transform({ filename, options, src }: Params) {
   options = options || {};
 
-  const babelConfig = buildBabelConfig(filename, options);
-  const result = babel.transform(src, babelConfig);
+  const OLD_BABEL_ENV = process.env.BABEL_ENV;
+  process.env.BABEL_ENV = options.dev ? 'development' : 'production';
 
+  try {
+    const babelConfig = buildBabelConfig(filename, options);
+    const { ast, ignored } = babel.transform(src, babelConfig);
+
+    if (ignored) {
+      return {
+        ast: null,
+        code: src,
+        filename,
+        map: null,
+      };
+    } else {
+      const result = generate(
+        ast,
+        {
+          comments: false,
+          compact: false,
+          filename,
+          sourceFileName: filename,
+          sourceMaps: true,
+        },
+        src
+      );
+
+      return {
+        ast,
+        code: result.code,
+        filename,
+        map: options.generateSourceMaps
+          ? result.map
+          : result.rawMappings.map(compactMapping),
+      };
+    }
+  } finally {
+    process.env.BABEL_ENV = OLD_BABEL_ENV;
+  }
+}
+
+function getCacheKey() {
+  var key = crypto.createHash('md5');
+  cacheKeyParts.forEach(part => key.update(part));
+  return key.digest('hex');
+}
+
+/**
+ * [Expo] Returns an Expo-internal Babel preset for aliasing react-native and
+ * react imports
+ */
+function buildModuleResolverPreset() {
+  const expoReactNativePath = path.join(__dirname, 'react-native');
+  const expoReactPath = path.join(expoReactNativePath, 'node_modules/react');
   return {
-    ast: result.ast,
-    code: result.code,
-    map: result.map,
-    filename,
+    plugins: [
+      [
+        require('babel-plugin-module-resolver').default,
+        {
+          alias: {
+            react: expoReactPath,
+            'react-native': expoReactNativePath,
+          },
+        },
+      ],
+    ],
   };
 }
 
-module.exports = function(data, callback) {
-  let result;
-  try {
-    result = transform(data.sourceCode, data.filename, data.options);
-  } catch (e) {
-    callback(e);
-    return;
-  }
-
-  callback(null, result);
-};
-
-// export for use in jest
-module.exports.transform = transform;
+module.exports = ({
+  transform,
+  getCacheKey,
+}: Transformer<>);
