@@ -7,7 +7,7 @@
 
 const path = require('path');
 
-const babelRegisterOnly = require('./react-native/node_modules/metro-bundler/build/babelRegisterOnly');
+const babelRegisterOnly = require('./react-native/node_modules/metro-bundler/src/babelRegisterOnly');
 
 const registeredTransformModulePaths = new Set();
 

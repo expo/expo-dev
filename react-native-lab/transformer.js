@@ -7,8 +7,6 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  *
  * Note: This is a fork of the fb-specific transform.js
- *
- * @flow
  */
 'use strict';
 
@@ -33,13 +31,7 @@ const resolvePlugins = require('./react-native/node_modules/babel-preset-react-n
 
 const {
   compactMapping,
-} = require('./react-native/node_modules/metro-bundler/build/Bundler/source-map'); // Chnage in SDK 20
-
-import type { Plugins as BabelPlugins } from './react-native/node_modules/babel-core';
-import type {
-  Transformer,
-  TransformOptions,
-} from './react-native/node_modules/metro-bundler/build/JSTransformer/worker'; // Change in SDK 20
+} = require('./react-native/node_modules/metro-bundler/src/Bundler/source-map');
 
 const cacheKeyParts = [
   fs.readFileSync(__filename),
@@ -75,9 +67,8 @@ function buildBabelConfig(filename, options) {
   const extraPlugins = [externalHelpersPlugin];
 
   var inlineRequires = options.inlineRequires;
-  var blacklist = typeof inlineRequires === 'object'
-    ? inlineRequires.blacklist
-    : null;
+  var blacklist =
+    typeof inlineRequires === 'object' ? inlineRequires.blacklist : null;
   if (inlineRequires && !(blacklist && filename in blacklist)) {
     extraPlugins.push(inlineRequiresPlugin);
   }
@@ -92,14 +83,7 @@ function buildBabelConfig(filename, options) {
   return Object.assign({}, babelRC, config);
 }
 
-type Params = {
-  filename: string,
-  options: TransformOptions,
-  plugins?: BabelPlugins,
-  src: string,
-};
-
-function transform({ filename, options, src }: Params) {
+function transform({ filename, options, src }) {
   options = options || {};
 
   const OLD_BABEL_ENV = process.env.BABEL_ENV;
@@ -171,7 +155,7 @@ function buildModuleResolverPreset() {
   };
 }
 
-module.exports = ({
+module.exports = {
   transform,
   getCacheKey,
-}: Transformer<>);
+};

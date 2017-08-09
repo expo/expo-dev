@@ -1,6 +1,8 @@
 'use strict';
 
-const blacklist = require(`./react-native/node_modules/metro-bundler/build/blacklist`);
+const {
+  createBlacklist,
+} = require(`./react-native/node_modules/metro-bundler`);
 const path = require('path');
 
 const sharedLibraryBlacklist = [
@@ -52,12 +54,12 @@ module.exports = {
 
     regexes = [...regexes, ...extra];
 
-    return blacklist(regexes);
+    return createBlacklist(regexes);
   },
   expoBlacklist(extra) {
     const universePath = path.join(__dirname, '..');
 
-    return blacklist([
+    return createBlacklist([
       new RegExp(`^${escapeRegExp(universePath)}\/dev\/.*$`),
       new RegExp(
         `^${escapeRegExp(

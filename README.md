@@ -18,11 +18,12 @@ a place for you to experiment with the ipi that you're working on.
 3. `npm install -g hyperinstall`
 4. Run `./tools/setup` -- this will get the latest version of each
 package, then build and link xdl and start the packager for Expo home.
-5. Follow [these steps to run the Expo client on
+5. Go to `expo/ios` and run `rm Pods/Local\ Podspecs/RCTTest.podspec.json`
+6. Follow [these steps to run the Expo client on
 Android](https://github.com/expo/expo#android) or [these
 steps](https://github.com/expo/expo#ios) to run it on iOS.
-6. Once you have the iOS or Android client running, cd into `apps/test-suite/__develop__` and run `exp start`
-7. Open the test-suite app using the client that you built.
+7. Once you have the iOS or Android client running, cd into `apps/test-suite/__develop__` and run `exp start`
+8. Open the test-suite app using the client that you built.
 
 **Note: for CI reasons you need to use the `__develop__` directory with
 test-suite. `apps/playground` doesn't have a `__develop__` directory,
