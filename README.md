@@ -1,3 +1,9 @@
+# WARNING
+
+This repository is no longer worked on, and probably will not work for you. We are coming up with an easier solution for streamlining open source contribution workflow, stay tuned
+
+---------------------------------------------------------------------------------
+
 # expo-dev
 
 The purpose of this repository is to make it easier for people to
